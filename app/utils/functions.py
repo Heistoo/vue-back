@@ -8,14 +8,15 @@ def ChooseLinks(soup):
         href = link['href']
         text = link.get_text().strip()
         href = FormatLink(href)
-        print(f"Texto: {text} -> Link: {href}")
 
+# function to format link ensuring it has the full domain
 def FormatLink(href):
     """Formata o link para garantir que tenha o domínio completo."""
     if not href.startswith("http"):
         href = "https://www.gov.br" + href
     return href
 
+# function to get link based on user input
 def FindLink(links, choice):
     """Busca o link pelo texto fornecido."""
     for link in links:
@@ -24,9 +25,10 @@ def FindLink(links, choice):
             return link['href']
     return None
 
+# function to get link href and return it for webscraping unit testing
 def GetRef(soup):
     """Permite escolher um link pelo texto e retorna o link completo."""
-    links = soup.find_all("a", href=True)
+    links = soup.find_all("a", href=True) # get all links from page 
     while True:
         choice = input("Digite o texto do anexo que você quer baixar: ").strip()
         href = FindLink(links, choice)
