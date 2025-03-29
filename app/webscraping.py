@@ -7,8 +7,17 @@ html = urlopen(url).read()
 soup = BeautifulSoup(html, features="html.parser")
 
 # Chamando as funções do arquivo utils/functions.py
-print("Listando todos os links da página:")
-ChooseLinks(soup)
-
-print("\nEscolha um link pelo texto:")
-GetRef(soup)
+# ChooseLinks(soup)
+verify = False
+while not verify:
+    try:
+        count = int(input("Quantos links você quer baixar? "))
+        if count > 0:
+            print("\nEscolha os links pelo texto:")
+            for _ in range(count):
+                GetRef(soup)
+            verify = True
+        else:
+            print("Digite um número maior que 0")
+    except ValueError:
+        print("Por favor, digite um número válido.")
