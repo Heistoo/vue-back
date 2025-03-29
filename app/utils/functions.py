@@ -3,6 +3,16 @@ import os
 import zipfile
 import urllib.request
 
+# function to reduce code reutilization by verifying directory existence
+def EnsureDirectoryExists(directory):
+    """Verifica se o diretório existe e, caso contrário, cria-o."""
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Diretório {directory} criado.")
+    else:
+        print(f"Diretório {directory} já existe.")
+
+
 # function to get links from user input and store in a list
 def GetChosenLinks(soup, count):
     """Permite que o usuário escolha os links para baixar e retorna os links selecionados."""
@@ -20,8 +30,7 @@ def DownloadContent(url, filename="Anexo", save_directory="data/raw"):
     """Baixa o conteúdo do link e salva no arquivo especificado dentro do diretório informado."""
     try:
         # verify if directory exists
-        if not os.path.exists(save_directory):
-            os.makedirs(save_directory)
+        EnsureDirectoryExists(save_directory)
 
         extension = url.split('.')[-1]
         file_path = os.path.join(save_directory, f"{filename}.{extension}")  # Usando o caminho completo
@@ -36,10 +45,15 @@ def DownloadContent(url, filename="Anexo", save_directory="data/raw"):
 
 
 # function to generate a zip file for downloaded files
-def GenerateZip(files, zip_name="Anexos.zip"):
+def GenerateZip(files, zip_name="Anexos.zip", save_directory="data/processed"):
     """Cria um arquivo ZIP com os arquivos baixados."""
     try:
-        with zipfile.ZipFile(zip_name, 'w') as zipf:
+        # verify if directory already exists
+        EnsureDirectoryExists(save_directory)
+        
+        zip_path = os.path.join(save_directory, zip_name)
+
+        with zipfile.ZipFile(zip_path, 'w') as zipf:
             for file in files:
                 zipf.write(file, os.path.basename(file))  # add files to zip
                 print(f"Arquivo {file} adicionado ao ZIP.")
