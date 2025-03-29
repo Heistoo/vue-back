@@ -3,7 +3,34 @@ import os
 import zipfile
 import urllib.request
 
-def DownloadContent(url, filename="downloaded_file"):
+def GetChosenLinks(soup, count):
+    """Permite que o usuário digite os textos dos links que deseja baixar e retorna os links correspondentes."""
+    links = soup.find_all("a", href=True)
+    chosen_links = []
+    
+    for i in range(count):
+        print(f"\nEscolha o link {i+1}:")
+        link_text = input("Digite o texto do anexo que você quer baixar: ").strip()
+        found = False
+        
+        for link in links:
+            text = link.get_text().strip()
+            if link_text.lower() in text.lower():  # Verifica se o texto corresponde
+                href = link['href']
+                if not href.startswith("http"):
+                    href = "https://www.gov.br" + href
+                print(f"Link encontrado: {text} -> {href}")
+                chosen_links.append(href)
+                found = True
+                break  # Sai do loop quando encontra o link
+        
+        if not found:
+            print(f"Nenhum link encontrado para o texto: '{link_text}'")
+    
+    return chosen_links
+
+
+def DownloadContent(url, filename="Anexo"):
     """Baixa o conteúdo do link e salva no arquivo especificado."""
     try:
         extension = url.split('.')[-1]
