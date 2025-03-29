@@ -3,33 +3,19 @@ import os
 import zipfile
 import urllib.request
 
+# function to get links from user input and store in a list
 def GetChosenLinks(soup, count):
-    """Permite que o usuário digite os textos dos links que deseja baixar e retorna os links correspondentes."""
-    links = soup.find_all("a", href=True)
+    """Permite que o usuário escolha os links para baixar e retorna os links selecionados."""
     chosen_links = []
-    
+
     for i in range(count):
         print(f"\nEscolha o link {i+1}:")
-        link_text = input("Digite o texto do anexo que você quer baixar: ").strip()
-        found = False
-        
-        for link in links:
-            text = link.get_text().strip()
-            if link_text.lower() in text.lower():  # Verifica se o texto corresponde
-                href = link['href']
-                if not href.startswith("http"):
-                    href = "https://www.gov.br" + href
-                print(f"Link encontrado: {text} -> {href}")
-                chosen_links.append(href)
-                found = True
-                break  # Sai do loop quando encontra o link
-        
-        if not found:
-            print(f"Nenhum link encontrado para o texto: '{link_text}'")
-    
+        link = GetRef(soup)  # utilize getref to get the link from the user
+        if link:
+            chosen_links.append(link)
     return chosen_links
 
-
+# function to download content from given link and save it to a file
 def DownloadContent(url, filename="Anexo"):
     """Baixa o conteúdo do link e salva no arquivo especificado."""
     try:
@@ -49,7 +35,7 @@ def GenerateZip(files, zip_name="Anexos.zip"):
     try:
         with zipfile.ZipFile(zip_name, 'w') as zipf:
             for file in files:
-                zipf.write(file, os.path.basename(file))  # Adiciona ao ZIP
+                zipf.write(file, os.path.basename(file))  # add files to zip
                 print(f"Arquivo {file} adicionado ao ZIP.")
         print(f"Arquivo ZIP criado com sucesso: {zip_name}")
     except Exception as e:
