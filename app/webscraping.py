@@ -6,23 +6,21 @@ url = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedad
 html = urlopen(url).read()
 soup = BeautifulSoup(html, features="html.parser")
 
-# Chamando as funções do arquivo utils/functions.py
-# ChooseLinks(soup)
-
 try:
     count = int(input("\nQuantos links você quer escolher? "))
     if count > 0:
-        # Obter os links escolhidos pelo usuário
+        
+        # get links based on the user numerical input
         chosen_links = GetChosenLinks(soup, count)
 
-        # Baixar os arquivos
+        # download files from given link
         downloaded_files = []  # Lista para armazenar os arquivos baixados
         for i, link in enumerate(chosen_links, 1):
             file_path = DownloadContent(link, f"downloaded_file_{i}")
             if file_path:
                 downloaded_files.append(file_path)
 
-        # Compactar todos os arquivos baixados em um arquivo ZIP
+        # integration with downloaded files to compact in a zip file
         if downloaded_files:
             GenerateZip(downloaded_files, "downloads.zip")
     else:
