@@ -1,4 +1,32 @@
 from bs4 import BeautifulSoup
+import os
+import zipfile
+import urllib.request
+
+def DownloadContent(url, filename="downloaded_file"):
+    """Baixa o conteúdo do link e salva no arquivo especificado."""
+    try:
+        extension = url.split('.')[-1]
+        file_path = f"{filename}.{extension}"
+
+        print(f"Baixando o arquivo de: {url}")
+        urllib.request.urlretrieve(url, file_path)
+        print(f"Arquivo salvo como: {file_path}")
+        return file_path  # Retorna o caminho do arquivo salvo
+    except Exception as e:
+        print(f"Erro ao baixar o arquivo: {e}")
+        return None
+
+def GenerateZip(files, zip_name="Anexos.zip"):
+    """Cria um arquivo ZIP com os arquivos baixados."""
+    try:
+        with zipfile.ZipFile(zip_name, 'w') as zipf:
+            for file in files:
+                zipf.write(file, os.path.basename(file))  # Adiciona ao ZIP
+                print(f"Arquivo {file} adicionado ao ZIP.")
+        print(f"Arquivo ZIP criado com sucesso: {zip_name}")
+    except Exception as e:
+        print(f"Erro ao criar o arquivo ZIP: {e}")
 
 # function to find all links in a webpage and print them
 def ChooseLinks(soup):
