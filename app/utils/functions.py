@@ -15,12 +15,16 @@ def GetChosenLinks(soup, count):
             chosen_links.append(link)
     return chosen_links
 
-# function to download content from given link and save it to a file
-def DownloadContent(url, filename="Anexo"):
-    """Baixa o conteúdo do link e salva no arquivo especificado."""
+# function to download content from given link and save it to a file in raw folder (for pdfs, xlsx, etc)
+def DownloadContent(url, filename="Anexo", save_directory="data/raw"):
+    """Baixa o conteúdo do link e salva no arquivo especificado dentro do diretório informado."""
     try:
+        # verify if directory exists
+        if not os.path.exists(save_directory):
+            os.makedirs(save_directory)
+
         extension = url.split('.')[-1]
-        file_path = f"{filename}.{extension}"
+        file_path = os.path.join(save_directory, f"{filename}.{extension}")  # Usando o caminho completo
 
         print(f"Baixando o arquivo de: {url}")
         urllib.request.urlretrieve(url, file_path)
@@ -30,6 +34,8 @@ def DownloadContent(url, filename="Anexo"):
         print(f"Erro ao baixar o arquivo: {e}")
         return None
 
+
+# function to generate a zip file for downloaded files
 def GenerateZip(files, zip_name="Anexos.zip"):
     """Cria um arquivo ZIP com os arquivos baixados."""
     try:
