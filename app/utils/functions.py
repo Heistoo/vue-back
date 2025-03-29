@@ -50,9 +50,10 @@ def GenerateZip(files, zip_name="Anexos.zip", save_directory="data/processed"):
     try:
         # verify if directory already exists
         EnsureDirectoryExists(save_directory)
-        
-        zip_path = os.path.join(save_directory, zip_name)
 
+        # get save path and zip name
+        zip_path = os.path.join(save_directory, zip_name)
+        # write and create zip file
         with zipfile.ZipFile(zip_path, 'w') as zipf:
             for file in files:
                 zipf.write(file, os.path.basename(file))  # add files to zip
