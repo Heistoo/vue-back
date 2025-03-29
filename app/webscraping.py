@@ -16,13 +16,13 @@ try:
         # download files from given link
         downloaded_files = []  # Lista para armazenar os arquivos baixados
         for i, link in enumerate(chosen_links, 1):
-            file_path = DownloadContent(link, f"downloaded_file_{i}")
+            file_path = DownloadContent(link, f"Anexo_{i}")
             if file_path:
                 downloaded_files.append(file_path)
 
         # integration with downloaded files to compact in a zip file
         if downloaded_files:
-            GenerateZip(downloaded_files, "downloads.zip")
+            GenerateZip(downloaded_files, "anexos.zip")
     else:
         print("Digite um número maior que 0")
 except ValueError:
