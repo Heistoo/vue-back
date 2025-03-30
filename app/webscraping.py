@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from utils.functions import ChooseLinks, GetRef, DownloadContent, GenerateZip, GetChosenLinks
+from app.utils.scrapingfunctions import ChooseLinks, GetRef, DownloadContent, GenerateZip, GetChosenLinks
 
 url = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
 html = urlopen(url).read()
